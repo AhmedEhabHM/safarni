@@ -1,10 +1,12 @@
-import { BrowserRouter } from "react-router-dom"
-import AppRoutes from "./routes"
+import Search from "./pages/Search/Search";
+import { BrowserRouter } from "react-router-dom";
+import PaymentPage from "./components/checkout/PaymentPage";
 
 const App = () => {
   return (
     <BrowserRouter>
-      <AppRoutes />
+      <Search /> 
+      <PaymentPage />
     </BrowserRouter>
   )
 }
