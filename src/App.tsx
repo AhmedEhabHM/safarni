@@ -1,5 +1,9 @@
+import Search from "./pages/Search/Search";
+
 const App = () => {
-  return <div>App</div>;
+  return <div>
+   <Search /> 
+  </div>;
 };
 
 export default App;
