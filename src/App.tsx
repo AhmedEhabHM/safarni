@@ -1,12 +1,13 @@
 import { BrowserRouter } from "react-router-dom";
-import AppRoutes from "./routes/index";
+import PaymentPage from "./components/checkout/PaymentPage";
 
 const App = () => {
   return (
     <BrowserRouter>
-      <AppRoutes />
+      <PaymentPage />
     </BrowserRouter>
   );
 };
 
 export default App;
+
