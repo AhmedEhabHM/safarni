@@ -1,10 +1,10 @@
 import { BrowserRouter } from "react-router-dom";
-import AppRoutes from "./routes";
+import PaymentPage from "./components/checkout/PaymentPage";
 
 const App = () => {
   return (
     <BrowserRouter>
-      <AppRoutes />
+      <PaymentPage />
     </BrowserRouter>
   );
 };
