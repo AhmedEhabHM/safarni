@@ -123,4 +123,13 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+  .auth-component-layout {
+    @apply flex flex-col items-center px-20 pb-10 pt-8;
+  }
+  .auth-content-layout {
+    @apply flex w-full flex-row items-center justify-between;
+  }
+  .form-button {
+    @apply w-full h-12 rounded-sm text-xl font-semibold bg-blue-800 text-white hover:text-white hover:bg-blue-900;
+  }
 }
