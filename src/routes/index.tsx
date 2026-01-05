@@ -13,6 +13,9 @@ import HotelAboutPage from "@/pages/hotel/HotelAboutPage";
 import { Favorites } from "@/pages/favourite/Favorites";
 import { Provider } from "react-redux";
 import { store } from "@/store";
+import PaymentPage from "@/components/checkout/PaymentPage";
+import SuccessPage from "@/components/checkout/pages/SuccessPage";
+import ErrorPage from "@/components/checkout/pages/ErrorPage";
 
 export default function AppRoutes() {
   return (
@@ -41,6 +44,9 @@ export default function AppRoutes() {
               </div>
             }
           />
+          <Route path="payment" element={<PaymentPage />} />
+          <Route path="payment/success" element={<SuccessPage />} />
+          <Route path="payment/error" element={<ErrorPage />} />
         </Route>
         <Route path="/welcome" element={<WelcomePage />} />
         <Route path="/login" element={<LoginPage />} />
