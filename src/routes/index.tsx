@@ -8,6 +8,9 @@ import ForgotPassword from "@/pages/password-management/ForgotPassword";
 import OTPVerification from "@/pages/password-management/OTPVerification";
 import FlightBooking from "@/pages/flight-booking/FlightBooking";
 import SeatBookingPage from "@/pages/flight-booking/SeatBookingPage";
+import ProfileSettings from "@/components/profile/ProfileSettings";
+import PersonalInformation from "@/components/profile/PersonalInformation";
+import AccountSecurity from "@/components/profile/AccountSecurity";
 
 export default function AppRoutes() {
   return (
@@ -17,7 +20,7 @@ export default function AppRoutes() {
         <Route
           path="favorite"
           element={
-            <div className="pt-[110px] p-8">
+            <div className="pt-27.5 p-8">
               <h1>Favorite Page</h1>
             </div>
           }
@@ -25,7 +28,7 @@ export default function AppRoutes() {
         <Route
           path="compare"
           element={
-            <div className="pt-[110px] p-8">
+            <div className="pt-27.5 p-8">
               <h1>Compare Page</h1>
             </div>
           }
@@ -33,7 +36,7 @@ export default function AppRoutes() {
         <Route
           path="maps"
           element={
-            <div className="pt-[110px] p-8">
+            <div className="pt-27.5 p-8">
               <h1>Maps Page</h1>
             </div>
           }
@@ -46,6 +49,12 @@ export default function AppRoutes() {
       <Route path="/otp-verify" element={<OTPVerification />} />
       <Route path="/flight-booking" element={<FlightBooking />} />
       <Route path="/seat-booking" element={<SeatBookingPage />} />
+      <Route path="/profile" element={<ProfileSettings />} />
+      <Route path="/personal-info" element={<PersonalInformation />} />
+      <Route path="/security" element={<AccountSecurity />} />
+
+
+
     </Routes>
   );
 }
