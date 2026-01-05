@@ -1,13 +1,14 @@
-import { Route, Routes } from "react-router-dom";
-import { MainLayout } from "../components/layout/MainLayout";
-import { Home } from "../pages/home/Home";
-import SignUpPage from "@/pages/auth/signup/SignUpPage";
-import WelcomePage from "@/pages/auth/welcome/WelcomePage";
-import LoginPage from "@/pages/auth/login/LoginPage";
-import ForgotPassword from "@/pages/password-management/ForgotPassword";
-import OTPVerification from "@/pages/password-management/OTPVerification";
-import FlightBooking from "@/pages/flight-booking/FlightBooking";
-import SeatBookingPage from "@/pages/flight-booking/SeatBookingPage";
+import { Route, Routes } from "react-router-dom"
+import { MainLayout } from "../components/layout/MainLayout"
+import { Home } from "../pages/home/Home"
+import SignUpPage from "@/pages/auth/signup/SignUpPage"
+import WelcomePage from "@/pages/auth/welcome/WelcomePage"
+import LoginPage from "@/pages/auth/login/LoginPage"
+import ForgotPassword from "@/pages/password-management/ForgotPassword"
+import OTPVerification from "@/pages/password-management/OTPVerification"
+import FlightBooking from "@/pages/flight-booking/FlightBooking"
+import SeatBookingPage from "@/pages/flight-booking/SeatBookingPage"
+import CompareToursPage from "@/pages/compare/CompareToursPage"
 
 export default function AppRoutes() {
   return (
@@ -22,14 +23,7 @@ export default function AppRoutes() {
             </div>
           }
         />
-        <Route
-          path="compare"
-          element={
-            <div className="pt-[110px] p-8">
-              <h1>Compare Page</h1>
-            </div>
-          }
-        />
+        <Route path="compare" element={<CompareToursPage />} />
         <Route
           path="maps"
           element={
@@ -47,5 +41,5 @@ export default function AppRoutes() {
       <Route path="/flight-booking" element={<FlightBooking />} />
       <Route path="/seat-booking" element={<SeatBookingPage />} />
     </Routes>
-  );
+  )
 }
