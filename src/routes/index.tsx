@@ -10,10 +10,11 @@ import FlightBooking from "@/pages/flight-booking/FlightBooking";
 import SeatBookingPage from "@/pages/flight-booking/SeatBookingPage";
 import AuthLayout from "@/components/layout/AuthLayout";
 import NewPassword from "@/pages/password-management/NewPassword";
-import Success from "@/pages/password-management/Success";
+import ResetPassSuccess from "@/pages/password-management/Success";
 
 import HotelPage from "@/pages/hotel/HotelPage";
 import HotelAboutPage from "@/pages/hotel/HotelAboutPage";
+import { Favorites } from "@/pages/favourite/Favorites";
 import { Provider } from "react-redux";
 import { store } from "@/store";
 import PaymentPage from "@/components/checkout/PaymentPage";
@@ -26,14 +27,7 @@ export default function AppRoutes() {
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
-          <Route
-            path="favorite"
-            element={
-              <div className="pt-[110px] p-8">
-                <h1>Favorite Page</h1>
-              </div>
-            }
-          />
+          <Route path="favorite" element={<Favorites />} />
           <Route
             path="compare"
             element={
@@ -65,7 +59,7 @@ export default function AppRoutes() {
         </Route>
         <Route path="/flight-booking" element={<FlightBooking />} />
         <Route path="/seat-booking" element={<SeatBookingPage />} />
-        <Route path="/success" element={<Success />} />
+        <Route path="/success" element={<ResetPassSuccess />} />
         <Route path="/hotel" element={<HotelPage />} />
         <Route path="hotel/:hotelId" element={<HotelAboutPage />} />
         <Route path="hotel/:hotelId/:tab" element={<HotelAboutPage />} />
