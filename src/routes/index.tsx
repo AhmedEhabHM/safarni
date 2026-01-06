@@ -15,6 +15,7 @@ import HotelPage from "@/pages/hotel/HotelPage";
 import HotelAboutPage from "@/pages/hotel/HotelAboutPage";
 import { Favorites } from "@/pages/favourite/Favorites";
 import { Provider } from "react-redux";
+
 import { store } from "@/store";
 import PaymentPage from "@/components/checkout/PaymentPage";
 import SuccessPage from "@/components/checkout/pages/SuccessPage";
