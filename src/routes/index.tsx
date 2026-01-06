@@ -12,6 +12,9 @@ import HotelPage from "@/pages/hotel/HotelPage";
 import HotelAboutPage from "@/pages/hotel/HotelAboutPage";
 import { Provider } from "react-redux";
 import { store } from "@/store";
+import BoardingPassPage from "@/pages/flight-booking/BoardingPassPage";
+import FilterPanelPage from "@/pages/flight-booking/FilterPanelPage";
+import { FlightBookingForm } from "@/pages/flight-booking/FlightBookingForm";
 
 export default function AppRoutes() {
   return (
@@ -51,6 +54,9 @@ export default function AppRoutes() {
       <Route path="/otp-verify" element={<OTPVerification />} />
       <Route path="/flight-booking" element={<FlightBooking />} />
       <Route path="/seat-booking" element={<SeatBookingPage />} />
+      <Route path="/boarding-pass" element={<BoardingPassPage />} />
+      <Route path="/filter-panel" element={<FilterPanelPage />} />
+      <Route path="/flight-form" element={<FlightBookingForm />} />
       <Route path="/hotel" element={<HotelPage />} />
       <Route path="hotel/:hotelId" element={<HotelAboutPage />} />
         <Route path="hotel/:hotelId/:tab" element={<HotelAboutPage />} />
