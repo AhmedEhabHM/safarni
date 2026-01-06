@@ -20,6 +20,9 @@ import PaymentPage from "@/components/checkout/PaymentPage";
 import SuccessPage from "@/components/checkout/pages/SuccessPage";
 import ErrorPage from "@/components/checkout/pages/ErrorPage";
 
+import CarsPage from "@/pages/cars";
+import CarDetailsPage from "@/pages/cars/details";
+import PickUpPage from "@/pages/cars/pickup";
 export default function AppRoutes() {
   return (
     <Provider store={store}>
@@ -66,6 +69,9 @@ export default function AppRoutes() {
       <Route path="/hotel" element={<HotelPage />} />
       <Route path="hotel/:hotelId" element={<HotelAboutPage />} />
       <Route path="hotel/:hotelId/:tab" element={<HotelAboutPage />} />
+      <Route path="/cars" element={<CarsPage />} />
+      <Route path="/cars/:id" element={<CarDetailsPage />} />
+      <Route path="/cars/:id/pick-up" element={<PickUpPage />} />
       </Routes>
     </Provider>
   );
