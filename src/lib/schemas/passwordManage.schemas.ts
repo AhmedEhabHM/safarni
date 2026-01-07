@@ -12,16 +12,16 @@ export const otpSchema = z.object({
 });
 
 export const newPassSchema = z.object({
-  newPassword: z
+  password: z
     .string()
     .min(8,"Password must be at least 8 char")
     .regex(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/, "Password must contain one special char"),
 
-confirmPassword: z
+password_confirmation: z
       .string()
       .min(1, { message: "Please confirm password" }),
   })
-  .refine((data) => data.newPassword === data.confirmPassword, {
+  .refine((data) => data.password === data.password_confirmation, {
     message: "Passwords do not match",
-    path: ["confirmPassword"],
+    path: ["password_confirmation"],
   });

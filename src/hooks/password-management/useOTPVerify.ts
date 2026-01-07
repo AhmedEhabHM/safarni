@@ -23,11 +23,12 @@ export const useOTPVerify = () => {
   >({
     mutationFn: OTPVerifyAPI,
 
-    onSuccess: (_data) => {
+    onSuccess: (_data, variables) => {
       toast.success("OTP Verified Successfully");
       navigate("/auth/new-password", {
         state: {
           user_id: _data.user_id,
+          otp: variables.otp
         },
       });
     },

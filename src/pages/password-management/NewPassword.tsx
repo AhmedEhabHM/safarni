@@ -2,11 +2,14 @@ import Logo from "@/components/ui/Logo";
 import forgotPassImg from "@/assets/forgotPassImg.png";
 import type { FC } from "react";
 import { ArrowLeft, Lock } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import NewPassForm from "@/components/password-management/NewPassForm";
 import BackButton from "@/components/backButton";
 
 const NewPassword: FC = () => {
+  const location = useLocation();
+  const user_id =  4;
+  const otp = "123456"
   return (
     <div className="auth-component-layout">
       <Logo style="self-end" />
@@ -28,7 +31,7 @@ const NewPassword: FC = () => {
               Your New Password Must be Different to Previously Used Password
             </p>
           </div>
-          <NewPassForm />
+          <NewPassForm user_id={user_id} otp={otp}/>
           <Link
             className="flex justify-center items-center gap-2 cursor-pointer"
             to="/login"
