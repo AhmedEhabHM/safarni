@@ -18,6 +18,7 @@ const NewPassword: FC = () => {
           <BackButton />
           <img
             src={forgotPassImg}
+            alt="reset password img"
             className="w-full self-start object-contain"
           />
         </div>
