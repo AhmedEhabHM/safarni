@@ -2,7 +2,7 @@ import type { FC } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { NewPassFormData } from "@/types/passwordManagement.types";
-import { newPassSchema } from "@/lib/schemas/passwordManage.schemas";
+import { newPassSchema, passwordRegex } from "@/lib/schemas/passwordManage.schemas";
 import PasswordRule from "./PasswordRule";
 import { InputGroupButton } from "../../ui/input-group";
 import PasswordInput from "./PasswordInput";
@@ -27,7 +27,7 @@ const NewPassForm: FC<NewPassFormProp> = ({ user_id, otp }) => {
   });
   const password = watch("password") || "";
   const isPasswordLengthValid = password.length >= 8;
-  const isPasswordFormatValid = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/.test(
+  const isPasswordFormatValid = passwordRegex.test(
     password
   );
   const NewPassFormInputs = [
@@ -64,7 +64,7 @@ const NewPassForm: FC<NewPassFormProp> = ({ user_id, otp }) => {
     },
     {
       valid: isPasswordFormatValid,
-      message: "Must contain one special character",
+      message: "Includes upper, lower, number & symbol",
     },
   ];
 
