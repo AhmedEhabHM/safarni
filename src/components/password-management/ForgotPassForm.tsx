@@ -8,17 +8,17 @@ import {
   InputGroupInput,
   InputGroupText,
 } from "../ui/input-group";
-import { MailIcon } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Loader2, MailIcon } from "lucide-react";
 import type { ForgotPassFormData } from "@/types/PasswordManagement.types";
 import { ForgotPassSchema } from "@/lib/schemas/passwordManage.schemas";
+import { useForgotPassword } from "@/hooks/password-management/useForgotPassword";
 
 const ForgotPassForm: FC = () => {
-  const navigate = useNavigate();
+  const { mutate, isPending } = useForgotPassword();
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     reset,
   } = useForm<ForgotPassFormData>({
     resolver: zodResolver(ForgotPassSchema),
@@ -27,28 +27,25 @@ const ForgotPassForm: FC = () => {
     },
   });
   const onSubmit = (data: ForgotPassFormData) => {
-    navigate("/otp-verify", {
-      state: {
-        email: data.email,
-      },
-    });
+    mutate(data);
     reset();
   };
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-3 items-center w-full"
+      className="flex flex-col gap-3 justify-center items-center  w-full max-w-md"
     >
       <div className="w-full">
-        <InputGroupText className="self-start text-lg text-neutral-700">
+        <InputGroupText className="self-start text-sm lg:text-lg text-neutral-700">
           Email
         </InputGroupText>
-        <InputGroup className={` w-full h-12 rounded-sm shadow-xs`}>
+        <InputGroup className={` w-full h-10 lg:h-12 rounded-sm shadow-xs`}>
           <InputGroupInput
-            disabled={isSubmitting}
+            disabled={isPending}
             type="email"
             placeholder="Enter your email"
             {...register("email")}
+            className="text-xs md:text-sm lg:text-lg w-full"
           />
           <InputGroupAddon>
             <MailIcon size={20} />
@@ -56,14 +53,14 @@ const ForgotPassForm: FC = () => {
         </InputGroup>
       </div>
       {errors.email && (
-        <p className="text-red-500 self-start">{errors.email.message}</p>
+        <p className="text-red-500 text-sm md:text-md lg:text-lg self-start">{errors.email.message}</p>
       )}
       <InputGroupButton
         type="submit"
-        disabled={isSubmitting}
-        className="w-full h-12 rounded-sm text-xl font-semibold bg-blue-800 text-white cursor-pointer hover:text-white hover:bg-blue-900"
+        disabled={isPending}
+        className="w-full h-10 lg:h-12 rounded-sm text-md lg:text-xl font-semibold bg-blue-800 text-white cursor-pointer hover:text-white hover:bg-blue-900"
       >
-        {isSubmitting ? "Sending" : "Reset Password"}
+        {isPending ? <>Sending<Loader2  className="animate-spin" /></> : "Reset Password"}
       </InputGroupButton>
     </form>
   );

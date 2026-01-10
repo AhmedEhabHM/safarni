@@ -23,10 +23,18 @@
   .auth-input {
     @apply w-full pl-12 pr-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm;
   }
+  .section-container {
+    @apply container max-w-full px-4 sm:px-8 md:px-12 lg:px-[100px];
+  }
 }
 
 body {
   font-family: "Poppins", sans-serif;
+  overflow-x: hidden;
+}
+
+html {
+  overflow-x: hidden;
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -156,11 +164,16 @@ body {
   body {
     @apply bg-background text-foreground;
   }
-  .auth-component-layout {
-    @apply flex flex-col items-center px-20 pb-10 pt-8;
+
+  .auth-layout{
+    @apply w-full flex flex-col justify-start items-center h-screen lg:h-fit;
   }
-  .auth-content-layout {
-    @apply flex w-full flex-row items-center justify-between;
+
+  .auth-component-layout{
+    @apply flex flex-col w-full justify-center items-center pb-10 gap-10 md:gap-0 px-4 md:px-8 lg:px-15 pt-4 lg:pt-8;
+  }
+  .auth-content-layout{
+    @apply flex  flex-row w-full items-center justify-center;
   }
   .form-button {
     @apply w-full h-12 rounded-sm text-xl font-semibold bg-blue-800 text-white hover:text-white hover:bg-blue-900;

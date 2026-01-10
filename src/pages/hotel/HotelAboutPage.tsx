@@ -87,7 +87,7 @@ const HotelAboutPage: React.FC = () => {
         id: Number(hotelData.id || hotelId || 0),
         name: hotelData.name || `Hotel ${hotelId || 'Unknown'}`,
         location: hotelData.location || "Location not available",
-        rating: hotelData.rating || 4.5,
+        rating: parseFloat(hotelData.rating) || 4.5,
         about: hotelData.description || hotelData.content_info || hotelData.about || 
                `Welcome to ${hotelData.name || `Hotel ${hotelId}`}. This is a luxurious hotel offering premium amenities and exceptional service.`,
         phone: hotelData.phone || "+123 456 7890",
@@ -380,9 +380,11 @@ const HotelAboutPage: React.FC = () => {
 
                   <div className="flex items-center bg-white px-4 py-2 rounded-lg">
                     <FaStar className="w-5 h-5 text-yellow-500 mr-2" />
-                    <span className="text-gray-600 font-bold text-lg mr-2">
-                      {(hotel.rating || 4.5).toFixed(1)}
-                    </span>
+               <span className="text-gray-600 font-bold text-lg mr-2">
+                {typeof hotel.rating === 'number' ? hotel.rating.toFixed(1) : 
+                 !isNaN(parseFloat(hotel.rating)) ? parseFloat(hotel.rating).toFixed(1) : 
+                '4.5'}
+            </span>
                     <div className="text-gray-600">({reviewsData.length} reviews)</div>
                   </div>
                 </div>
@@ -405,7 +407,7 @@ const HotelAboutPage: React.FC = () => {
 
             {!showBooking && (
               <div className="mb-8">
-                <div className="flex items-center space-x-4 lg:space-x-12 border-b border-gray-200 pb-2 overflow-x-auto">
+                <div className="flex items-center space-x-4 lg:space-x-50 border-b border-gray-200 pb-2 overflow-x-auto">
                   {[
                     { key: "about", label: "About" },
                     { key: "gallery", label: "Gallery" },

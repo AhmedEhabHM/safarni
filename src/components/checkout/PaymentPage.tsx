@@ -1,15 +1,18 @@
 import CardShape from "./CardShape";
+import cardImage from "../../assets/checkout/card_image.png";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { useState } from "react";
 import { MethodSelector } from "./MethodSelector";
-import Visa from "./Booking/visa";
 import Mastercard from "./Booking/Mastercard";
 import Paypal from "./Booking/Paypal";
 import BackIcon from "./BackIcon";
+import { useParams } from "react-router-dom";
+import StripeForm from "./Booking/Stripe";
 
 export default function PaymentPage() {
+  const { id } = useParams();
   const [selectedValue, setSelectedValue] = useState<string>("");
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
   const handleContinue = () => {
@@ -22,15 +25,15 @@ export default function PaymentPage() {
     setIsConfirmed(true);
   };
   return (
-    <section>
-      <div className="max-w-310 mx-auto p-6 ">
+    <section className="mt-30 mb-10">
+      <div className="max-w-310 mx-auto p-6">
         <BackIcon url="#" />
         <div className="grid md:grid-cols-2 gap-8">
-          <CardShape />
+          <CardShape img={cardImage} />
           <div
-            className={`h-183.5 w-full flex flex-col ${
+            className={`h-145 w-full flex flex-col ${
               isConfirmed ? "justify-start" : "justify-between"
-            } gap-8 w-full py-2 px-10 font-sans`}
+            } gap-8 w-full py-2 px-3 md:px-10 font-sans`}
           >
             {/* Select Payment Method */}
             <MethodSelector
@@ -56,7 +59,9 @@ export default function PaymentPage() {
             {/* Payment Method Form */}
             {isConfirmed && (
               <div className="animate-in slide-in-from-top-4 duration-500">
-                {isConfirmed && selectedValue === "visa" && <Visa />}
+                {isConfirmed && selectedValue === "stripe" && (
+                  <StripeForm bookingId={id} />
+                )}
                 {isConfirmed && selectedValue === "mastercard" && (
                   <Mastercard />
                 )}

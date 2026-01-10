@@ -2,38 +2,45 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import paypal_image from "../../assets/checkout/logos_paypal.png";
 import mast_image from "../../assets/checkout/Mastercard.png";
-import visa_image from "../../assets/checkout/Visa.png";
+import stripe_image from "../../assets/checkout/Visa.png";
 type Props = { selectedValue: string; setSelectedValue: (m: string) => void };
 const payment_methods = [
   {
     id: "paypal",
     label: "Paypal",
     logo: paypal_image,
-    style: "text-[24px] font-medium text-[#4B5563]",
+    style: "text-[17px] md:text-[20px] font-medium text-[#4B5563]",
+    disabled: true,
   },
   {
     id: "mastercard",
     label: "Mastercard",
     logo: mast_image,
-    style: "text-[24px] font-medium text-[#4B5563]",
+    style: "text-[17px] md:text-[20px] font-medium text-[#4B5563]",
+    disabled: true,
   },
   {
-    id: "visa",
-    label: "Visa",
-    logo: visa_image,
-    style: "text-[24px] font-medium text-[#4B5563]",
+    id: "stripe",
+    label: "Stripe",
+    logo: stripe_image,
+    style: "text-[17px] md:text-[20px] font-medium text-[#4B5563]",
+    disabled: false,
   },
 ];
 export const MethodSelector = ({ selectedValue, setSelectedValue }: Props) => (
   <div>
-    <h2 className="text-[26px] text-center font-medium text-[#111928] mb-8">
+    <h2 className="text-[20px] md:text-[26px] text-center font-medium text-[#111928] mb-8">
       Payment Method
     </h2>
     <div>
-      <p className="text-[#374151] text-[22px] mb-6">Add Your Payment Method</p>
+      <p className="text-[#374151] text-[17px] md:text-[22px] mb-6">
+        Add Your Payment Method
+      </p>
       <RadioGroup
-        value={selectedValue}
-        onValueChange={setSelectedValue}
+        value={selectedValue === "stripe" ? "stripe" : ""}
+        onValueChange={(val) => {
+          if (val === "stripe") setSelectedValue(val);
+        }}
         className="flex flex-wrap gap-4"
       >
         {payment_methods.map((method) => (
@@ -42,12 +49,15 @@ export const MethodSelector = ({ selectedValue, setSelectedValue }: Props) => (
               value={method.id}
               id={method.id}
               className="peer sr-only"
+              disabled={method.disabled}
             />
             <Label
               htmlFor={method.id}
-              className="flex items-center gap-2 px-4 py-2 bg-[#F3F4F6] border rounded-full cursor-pointer transition-all 
+              className={`flex items-center gap-2 px-4 py-2 bg-[#F3F4F6] border rounded-full cursor-pointer transition-all 
                 peer-data-[state=checked]:border-blue-600 peer-data-[state=checked]:bg-blue-50 
-                hover:bg-slate-50 border-slate-200"
+                hover:bg-slate-50 border-slate-200 ${
+                  method.id !== "stripe" ? "opacity-50 cursor-not-allowed" : ""
+                }`}
             >
               <img
                 src={method.logo}

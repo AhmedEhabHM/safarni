@@ -70,77 +70,35 @@ export const hotelApi = {
     }
   },
 
-  // 6. إنشاء حجز جديد - محاولة جميع الـ APIs المحتملة
-  createBooking: async (bookingData: {
-    room_id: number;
-    check_in: string;
-    check_out: string;
-    adults: number;
-    children: number;
-    infants: number;
-    comment?: string;
-  }) => {
-    // قائمة بجميع الـ APIs المحتملة
-    const possibleEndpoints = [
-      '/hotel-bookings',  // من السجلات
-      '/hotel/bookings',
-      '/bookings',
-      '/booking',
-      '/reservations',
-      '/hotel/reservations'
-    ];
 
-    let lastError: any = null;
 
-    // محاولة جميع الـ endpoints
-    for (const endpoint of possibleEndpoints) {
-      try {
-        console.log(`Trying booking endpoint: ${BASE_URL}${endpoint}`);
-        
-        const response = await fetch(`${BASE_URL}${endpoint}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(bookingData),
-        });
+   createBooking: async (bookingData: {
+  room_id: number;
+  check_in: string;
+  check_out: string;
+  adults: number;
+  children?: number;
+  infants?: number;
+  comment?: string;
+}) => {
+  const response = await fetch(`${BASE_URL}/hotel-bookings`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json'
+    },
+    body: JSON.stringify(bookingData),
+  });
 
-        const responseText = await response.text();
-        console.log(`Response from ${endpoint}:`, responseText.substring(0, 200));
+  const data = await response.json();
 
-        // تخطي إذا كان رد HTML (خطأ)
-        if (responseText.trim().startsWith('<!DOCTYPE') || 
-            responseText.trim().startsWith('<html')) {
-          console.warn(`Endpoint ${endpoint} returned HTML, skipping...`);
-          continue;
-        }
+  if (!response.ok) {
+    throw data; 
+  }
 
-        let parsedResponse;
-        try {
-          parsedResponse = JSON.parse(responseText);
-        } catch (parseError) {
-          console.error(`Failed to parse JSON from ${endpoint}:`, parseError);
-          continue;
-        }
-
-        if (!response.ok) {
-          lastError = new Error(parsedResponse.message || `Request failed with status ${response.status}`);
-          continue;
-        }
-
-        console.log(`✅ Booking successful with endpoint: ${endpoint}`);
-        return parsedResponse;
-      } catch (error) {
-        console.warn(`Endpoint ${endpoint} failed:`, error);
-        lastError = error;
-      }
-    }
-
-    // إذا فشلت جميع المحاولات
-    throw lastError || new Error('All booking endpoints failed. Please check the API documentation.');
-  },
-
-  // 7. التحقق من توفر الـ APIs
+  return data;
+}
+,
   checkBookingAPIs: async () => {
     const endpoints = [
       '/hotel-bookings',

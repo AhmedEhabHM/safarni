@@ -5,7 +5,7 @@ import { FiUser, FiUserCheck, FiUserPlus, FiInfo } from "react-icons/fi";
 interface BookingSuccessProps {
   hotelName: string;
   onBack: () => void;
-  onSubmit: (data: { adults: number; children: number; infants: number }) => void;
+  onSubmit: (data: { adults: number; children: number; infants: number }) => Promise<any>;
   isLoading?: boolean;
 }
 
@@ -19,12 +19,19 @@ const BookingSuccess: React.FC<BookingSuccessProps> = ({
   const [children, setChildren] = useState<number>(0);
   const [infants, setInfants] = useState<number>(0);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (adults === 0) {
       alert("At least one adult is required for booking.");
       return;
     }
-    onSubmit({ adults, children, infants });
+    
+    try {
+      const guestData = { adults, children, infants };
+      await onSubmit(guestData);
+      // سيتم التعامل مع التوجيه في المكون الأب
+    } catch (error) {
+      console.error("Booking failed:", error);
+    }
   };
 
   const Counter = ({ 
@@ -87,10 +94,7 @@ const BookingSuccess: React.FC<BookingSuccessProps> = ({
         textAlign: "center"
       }}
     >
-      <div className="w-full mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Complete Your Booking</h2>
-        <p className="text-gray-600 mb-2">Hotel: <span className="font-semibold text-blue-700">{hotelName}</span></p>
-        
+      <div className="w-full mb-8">        
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 flex items-start">
           <FiInfo className="w-5 h-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
           <p className="text-sm text-blue-800 text-left">
@@ -134,13 +138,7 @@ const BookingSuccess: React.FC<BookingSuccessProps> = ({
       </div>
 
       <div className="flex gap-4 w-full">
-        <button
-          onClick={onBack}
-          className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 rounded-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-          disabled={isLoading}
-        >
-          Back
-        </button>
+       
         
         <button
           onClick={handleSubmit}
@@ -158,7 +156,7 @@ const BookingSuccess: React.FC<BookingSuccessProps> = ({
               Processing Booking...
             </>
           ) : (
-            'Confirm & Book Now'
+            ' Book Now'
           )}
         </button>
       </div>

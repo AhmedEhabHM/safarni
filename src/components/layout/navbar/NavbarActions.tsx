@@ -1,5 +1,6 @@
 import { SearchIcon, FilterIcon } from "../../icons";
 import userImage from "../../../assets/user.png";
+import { useNavigate } from 'react-router-dom';
 
 interface NavbarActionsProps {
   userPhotoUrl?: string;
@@ -14,31 +15,38 @@ export const NavbarActions = ({
   onFilterClick,
   onUserClick,
 }: NavbarActionsProps) => {
+  const navigate = useNavigate();
+
   return (
-    <div className="flex items-center gap-4 sm:gap-6 lg:gap-[40px] w-auto lg:w-[180px] h-10">
+    <div className="flex items-center gap-6 sm:gap-8 lg:gap-10 w-auto lg:w-[180px] h-9">
       <button
-        onClick={onSearchClick}
-        className="flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity"
+        onClick={() => {
+          onSearchClick?.();
+          navigate("/search");
+        }}
+        className="flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity flex-shrink-0"
         aria-label="Search"
       >
-        <SearchIcon />
+        <SearchIcon className="w-5 h-5" />
       </button>
       <button
         onClick={onFilterClick}
-        className="flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity"
+        className="flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity flex-shrink-0"
         aria-label="Filter"
       >
-        <FilterIcon />
+        <FilterIcon className="w-5 h-5" />
       </button>
       <button
-        onClick={onUserClick}
-        className="flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity"
+        onClick={() => {
+          onUserClick?.();
+          navigate("/profile");
+        }} className="flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity flex-shrink-0"
         aria-label="User profile"
       >
         <img
           src={userPhotoUrl || userImage}
           alt="User profile"
-          className="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover"
+          className="w-6 h-6 sm:w-8 sm:h-8 rounded-full object-cover"
         />
       </button>
     </div>

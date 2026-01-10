@@ -1,5 +1,6 @@
 // src/components/hotel/CheckInOutForm.tsx
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { createHotelBooking } from "@/store/slices/hotelActions";
@@ -8,7 +9,7 @@ import { hotelApi } from "../../services/hotelApi";
 
 interface CheckInOutContentProps {
   hotel: {
-    id: string;
+    id: number ;
     name: string;
     location: string;
     pricePerNight: number;
@@ -22,6 +23,7 @@ interface CheckInOutContentProps {
 
 const CheckInOutForm: React.FC<CheckInOutContentProps> = ({ hotel, onBack }) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { bookingLoading, bookingError } = useAppSelector((state) => state.hotel);
   
   const [checkIn, setCheckIn] = useState("");
@@ -102,8 +104,10 @@ const CheckInOutForm: React.FC<CheckInOutContentProps> = ({ hotel, onBack }) => 
     setApiStatus("Processing booking...");
     
     try {
-      const roomId = hotel.rooms?.[0]?.id || 1;
-      
+      const roomId = typeof hotel.rooms?.[0]?.id === 'string' 
+        ? parseInt(hotel.rooms?.[0]?.id) 
+        : hotel.rooms?.[0]?.id || 1;
+        
       const bookingData = {
         room_id: roomId,
         check_in: checkIn,
@@ -116,11 +120,14 @@ const CheckInOutForm: React.FC<CheckInOutContentProps> = ({ hotel, onBack }) => 
       
       const response = await dispatch(createHotelBooking(bookingData));
       
-      alert(`✅ Booking ${response.status === "success" ? "Successful" : "Simulated"}!\nBooking ID: ${response.data.id}\nTotal amount: $${totalPrice.toFixed(2)}\nStatus: ${response.data.booking_status}\n\n${response.message || ''}`);
+      // استخراج booking ID من الرد
+      const bookingId = response?.data?.id || response?.data?.booking_id || Date.now();
       
-      setTimeout(() => {
-        onBack();
-      }, 2000);
+      // عرض رسالة النجاح
+      alert(`✅ Booking ${response?.status === "success" ? "Successful" : "Simulated"}!\nBooking ID: ${bookingId}\nTotal amount: $${totalPrice.toFixed(2)}\nStatus: ${response?.data?.booking_status || "pending"}`);
+      
+      // التوجيه إلى صفحة الدفع
+      navigate(`/payment/${bookingId}`);
       
     } catch (error: any) {
       console.error('Booking failed:', error);
@@ -290,24 +297,10 @@ const CheckInOutForm: React.FC<CheckInOutContentProps> = ({ hotel, onBack }) => 
           </div>
         )}
 
-        <div className="text-center">
-          <button
-            type="button"
-            onClick={checkAvailableAPIs}
-            className="text-sm text-blue-600 hover:text-blue-800 mb-4"
-          >
-            Check API Status
-          </button>
-        </div>
+      
 
         <div className="flex gap-4 pt-4">
-          <button
-            type="button"
-            onClick={onBack}
-            className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 rounded-lg transition duration-300"
-          >
-            Back
-          </button>
+        
           <button
             type="submit"
             disabled={bookingLoading}
@@ -319,14 +312,7 @@ const CheckInOutForm: React.FC<CheckInOutContentProps> = ({ hotel, onBack }) => 
           </button>
         </div>
 
-        {showApiDebug && (
-          <div className="mt-4 p-3 bg-gray-100 rounded-lg">
-            <p className="text-sm text-gray-600">
-              <strong>Note for Developers:</strong> The booking system is currently in demo mode. 
-              Real API endpoints are being tested. Please check the browser console for detailed logs.
-            </p>
-          </div>
-        )}
+     
       </form>
     </div>
   );
