@@ -65,7 +65,7 @@ export default function AppRoutes() {
           <Route path="welcome" element={<WelcomePage />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="signup" element={<SignUpPage />} />
-          <Route index element={<Navigate to="forgot-password" replace />} />
+          <Route index element={<Navigate to="/welcome" replace />} />
           <Route path="forgot-password" element={<ForgotPassword />} />
           <Route path="otp-verify" element={<OTPVerification />} />
           <Route path="new-password" element={<NewPassword />} />

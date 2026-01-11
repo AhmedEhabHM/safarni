@@ -8,7 +8,7 @@ import BackButton from "@/components/backButton";
 
 const NewPassword: FC = () => {
   const location = useLocation();
-  const user_id = location.state.user_id;
+  const user_id = location.state.id;
   const otp = location.state.otp;
   return (
     <div className="auth-component-layout">

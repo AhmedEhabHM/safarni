@@ -21,9 +21,9 @@ export const useOTPVerify = () => {
 
     onSuccess: (_data, variables) => {
       toast.success("OTP Verified Successfully");
-      navigate("/auth/new-password", {
+      navigate("/auth/login", {
         state: {
-          user_id: _data.user_id,
+          id: _data.user_id,
           otp: variables.otp,
         },
       });

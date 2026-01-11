@@ -8,9 +8,8 @@ import BackButton from "@/components/backButton";
 
 const OTPVerification: FC = () => {
   const location = useLocation();
-  const email = location.state.email;
-  const user_id = location.state.user_id;
-
+  const email = location.state.email; 
+  const user_id = location.state.id;
   if (!email || !user_id) {
     return <Navigate to="/auth/forgot-password" replace />;
   }
@@ -39,7 +38,7 @@ const OTPVerification: FC = () => {
               {email}
             </p>
           </div>
-          <OTPForm user_id={user_id} email={email} />
+          <OTPForm user_id={user_id} email={email}/>
         </div>
       </div>
     </div>

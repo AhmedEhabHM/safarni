@@ -24,11 +24,12 @@ export const useForgotPassword = () => {
     mutationFn: ForgotPassAPI,
 
     onSuccess: (_data, variables) => {
-      toast.success("OTP sent to email");
-      navigate("/auth/otp-verify", {
+      toast.success("OTP verified successfully!");
+      navigate("/auth/new-password", {
         state: {
           email: variables.email,
-          user_id: _data.data.user_id,
+          id: _data.data.user_id,
+          otp:"1234"
         },
       });
     },
