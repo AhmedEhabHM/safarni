@@ -6,42 +6,45 @@ export const AccountSecurity: React.FC = () => {
     const [faceIdEnabled, setFaceIdEnabled] = useState(false);
 
     return (
-        <div className="relative rounded-2xl p-px bg-gradient-to-b from-[#4A90E2] to-[#DE3163]">
-            <div className="bg-white rounded-2xl p-6 md:p-10">
-                <h1 className="text-2xl md:text-3xl font-semibold text-center text-gray-800 mb-10">
-                    Account & Security
-                </h1>
-
-                <div className="flex flex-col gap-6">
-                    <div className="flex flex-col gap-2 mb-4">
+        <div className="relative rounded-xl sm:rounded-2xl p-px bg-gradient-to-b from-[#4A90E2] to-[#DE3163]">
+            <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6">
+                {/* Toggles */}
+                <div className="mb-6">
+                    <h3 className="text-sm font-medium text-gray-500 mb-3">Authentication</h3>
+                    <div className="bg-gray-50 rounded-xl p-3">
                         <ToggleRow
                             label="Biometric ID"
                             isEnabled={biometricEnabled}
                             onToggle={() => setBiometricEnabled(!biometricEnabled)}
                         />
+                        <div className="border-t border-gray-100 my-1" />
                         <ToggleRow
                             label="Face ID"
                             isEnabled={faceIdEnabled}
                             onToggle={() => setFaceIdEnabled(!faceIdEnabled)}
                         />
                     </div>
+                </div>
 
-                    <div className="flex flex-col gap-4">
+                {/* Actions */}
+                <div>
+                    <h3 className="text-sm font-medium text-gray-500 mb-3">Account Actions</h3>
+                    <div className="space-y-2">
                         <ActionCard
                             title="Change Password"
-                            description="Update your password for better security."
+                            description="Update your password"
                         />
                         <ActionCard
                             title="Device Management"
-                            description="Manage your account on the various devices you own."
+                            description="Manage connected devices"
                         />
                         <ActionCard
                             title="Deactivate Account"
-                            description="Temporarily deactivate your account. Easily reactivate when you're ready."
+                            description="Temporarily disable your account"
                         />
                         <ActionCard
                             title="Delete Account"
-                            description="Permanently remove your account and data. Proceed with caution."
+                            description="Permanently delete your account"
                             isDestructive
                         />
                     </div>

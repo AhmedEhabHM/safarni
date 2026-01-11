@@ -70,19 +70,16 @@ export const PersonalInformation: React.FC<PersonalInfoProps> = ({
     if (loading) {
         return (
             <div className="flex items-center justify-center h-64">
-                <Loader2 className="animate-spin text-blue-500" size={48} />
+                <Loader2 className="animate-spin text-blue-500" size={40} />
             </div>
         );
     }
 
     return (
-        <div className="relative rounded-2xl p-px bg-gradient-to-b from-[#4A90E2] to-[#DE3163]">
-            <div className="bg-white rounded-2xl p-6 md:p-10">
-                <h1 className="text-2xl md:text-3xl font-semibold text-center text-gray-800 mb-8">
-                    Personal Information
-                </h1>
-
-                <div className="flex flex-col items-center mb-8">
+        <div className="relative rounded-xl sm:rounded-2xl p-px bg-gradient-to-b from-[#4A90E2] to-[#DE3163]">
+            <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8">
+                {/* Avatar Section */}
+                <div className="flex flex-col items-center mb-6 sm:mb-8">
                     <Avatar
                         src={getUserAvatar(profile)}
                         size="lg"
@@ -90,21 +87,25 @@ export const PersonalInformation: React.FC<PersonalInfoProps> = ({
                         uploading={uploadingImage}
                         onImageSelect={onImageUpload}
                     />
-                    <p className="text-sm text-gray-500 mt-3">
-                        Click the camera icon to change your photo
-                    </p>
-                    <p className="text-xs text-gray-400 mt-1">
-                        Max size: 5MB - Formats: JPEG, PNG, GIF, WebP
-                    </p>
+                    <h2 className="mt-3 text-lg sm:text-xl font-semibold text-gray-800">
+                        {getUserDisplayName(profile)}
+                    </h2>
+                    <p className="text-sm text-gray-500">{profile?.email}</p>
+                    {profile?.role && (
+                        <span className="mt-2 px-3 py-1 bg-blue-100 text-blue-600 text-xs font-medium rounded-full capitalize">
+                            {profile.role}
+                        </span>
+                    )}
                 </div>
 
-                <div className="flex flex-col gap-6">
+                {/* Form */}
+                <div className="flex flex-col gap-4 sm:gap-5">
                     <InputField
                         label="Full Name"
                         placeholder="Enter your full name"
                         value={formData.full_name}
                         onChange={(value) => setFormData({ ...formData, full_name: value })}
-                        icon={<User size={20} />}
+                        icon={<User size={18} />}
                     />
 
                     <InputField
@@ -113,29 +114,18 @@ export const PersonalInformation: React.FC<PersonalInfoProps> = ({
                         placeholder="Enter your email"
                         value={formData.email}
                         onChange={(value) => setFormData({ ...formData, email: value })}
-                        icon={<Mail size={20} />}
+                        icon={<Mail size={18} />}
                     />
-
-                    {profile?.role && (
-                        <div className="flex flex-col gap-2">
-                            <label className="text-gray-700 font-medium text-sm sm:text-base">
-                                Role
-                            </label>
-                            <div className="px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-600 capitalize">
-                                {profile.role}
-                            </div>
-                        </div>
-                    )}
 
                     <button
                         onClick={handleSave}
                         disabled={saving}
                         className="w-full py-3 bg-gradient-to-r from-[#4A90E2] to-[#DE3163] text-white font-semibold rounded-xl
-                            hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
+                            hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2 text-sm sm:text-base mt-2"
                     >
                         {saving ? (
                             <>
-                                <Loader2 className="animate-spin" size={20} />
+                                <Loader2 className="animate-spin" size={18} />
                                 Saving...
                             </>
                         ) : (

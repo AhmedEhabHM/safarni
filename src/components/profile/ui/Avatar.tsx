@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Camera, Loader2, UserCircle } from 'lucide-react';
 import { ALLOWED_IMAGE_TYPES, MAX_IMAGE_SIZE } from '../../../constants/profile.constants';
 import toast from 'react-hot-toast';
@@ -12,16 +12,28 @@ interface AvatarProps {
     onImageSelect?: (file: File) => void;
 }
 
-const sizeClasses = {
-    sm: 'w-12 h-12',
-    md: 'w-16 h-16',
-    lg: 'w-24 h-24'
-};
-
-const iconSizes = {
-    sm: 28,
-    md: 36,
-    lg: 56
+const sizeConfig = {
+    sm: {
+        container: 'w-8 h-8 sm:w-10 sm:h-10',
+        icon: 20,
+        iconSm: 16,
+        camera: 10,
+        cameraSm: 8,
+    },
+    md: {
+        container: 'w-14 h-14 sm:w-16 sm:h-16',
+        icon: 36,
+        iconSm: 28,
+        camera: 12,
+        cameraSm: 10,
+    },
+    lg: {
+        container: 'w-20 h-20 sm:w-24 sm:h-24',
+        icon: 56,
+        iconSm: 44,
+        camera: 14,
+        cameraSm: 12,
+    },
 };
 
 export const Avatar: React.FC<AvatarProps> = ({
@@ -34,13 +46,14 @@ export const Avatar: React.FC<AvatarProps> = ({
 }) => {
     const [imageError, setImageError] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const config = sizeConfig[size];
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
         if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
-            toast.error('Please select a valid image (JPEG, PNG, GIF, WebP)');
+            toast.error('Please select a valid image');
             return;
         }
 
@@ -62,6 +75,10 @@ export const Avatar: React.FC<AvatarProps> = ({
         }
     };
 
+    useEffect(() => {
+        setImageError(false);
+    }, [src]);
+
     return (
         <div className="relative">
             {editable && (
@@ -75,16 +92,22 @@ export const Avatar: React.FC<AvatarProps> = ({
             )}
 
             <div
-                className={`${sizeClasses[size]} rounded-full overflow-hidden border-2 border-white shadow-sm ${className} ${editable ? 'cursor-pointer' : ''}`}
+                className={`${config.container} rounded-full overflow-hidden border-2 border-white shadow-sm ${className} ${editable ? 'cursor-pointer' : ''}`}
                 onClick={handleClick}
             >
                 {uploading ? (
-                    <div className="w-full h-full bg-linear-to-br from-blue-50 to-blue-100 flex items-center justify-center">
-                        <Loader2 size={iconSizes[size] / 2} className="animate-spin text-blue-500" />
+                    <div className="w-full h-full bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center">
+                        <Loader2 className="animate-spin text-blue-500 w-5 h-5 sm:w-6 sm:h-6" />
                     </div>
                 ) : !src || imageError ? (
-                    <div className="w-full h-full bg-linear-to-br from-blue-50 to-blue-100 flex items-center justify-center border border-blue-200">
-                        <UserCircle size={iconSizes[size]} className="text-blue-400" />
+                    <div className="w-full h-full bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center border border-blue-200">
+                        <UserCircle
+                            className="text-blue-400"
+                            style={{
+                                width: config.iconSm,
+                                height: config.iconSm
+                            }}
+                        />
                     </div>
                 ) : (
                     <img
@@ -100,7 +123,7 @@ export const Avatar: React.FC<AvatarProps> = ({
                 <button
                     onClick={handleClick}
                     disabled={uploading}
-                    className={`absolute bottom-0 right-0 p-1.5 rounded-lg border-2 border-white transition-colors
+                    className={`absolute bottom-0 right-0 p-1 sm:p-1.5 rounded-md sm:rounded-lg border-2 border-white transition-colors
                         ${uploading
                             ? 'bg-gray-100 cursor-not-allowed'
                             : 'bg-blue-100 hover:bg-blue-200 cursor-pointer'
@@ -108,9 +131,15 @@ export const Avatar: React.FC<AvatarProps> = ({
                     aria-label="Change profile picture"
                 >
                     {uploading ? (
-                        <Loader2 size={14} className="animate-spin text-blue-500" />
+                        <Loader2
+                            className="animate-spin text-blue-500"
+                            style={{ width: config.cameraSm, height: config.cameraSm }}
+                        />
                     ) : (
-                        <Camera size={14} className="text-blue-600" />
+                        <Camera
+                            className="text-blue-600"
+                            style={{ width: config.cameraSm, height: config.cameraSm }}
+                        />
                     )}
                 </button>
             )}

@@ -6,7 +6,7 @@ import {
   ALLOWED_IMAGE_TYPES,
   MAX_IMAGE_SIZE,
 } from "../constants/profile.constants";
-import { getToken, getUserAvatar } from "../utils/profile.utils";
+import { getUserAvatar } from "../utils/profile.utils";
 
 interface UseUserProfileReturn {
   user: UserProfile | null;
@@ -14,6 +14,7 @@ interface UseUserProfileReturn {
   error: string | null;
   uploadingImage: boolean;
   avatarUrl: string | null;
+  isAuthenticated: boolean;
   refetch: () => Promise<void>;
   updateProfile: (data: UpdateProfilePayload) => Promise<void>;
   uploadImage: (file: File) => Promise<void>;
@@ -28,12 +29,16 @@ export const useUserProfile = (
   const [error, setError] = useState<string | null>(null);
   const [uploadingImage, setUploadingImage] = useState(false);
 
-  const token = getToken();
+  const getToken = (): string | null => localStorage.getItem("token");
+
+  const isAuthenticated = !!getToken();
 
   const fetchProfile = useCallback(async () => {
+    const token = getToken();
+
     if (!token) {
       setLoading(false);
-      setError("No token found");
+      setUser(null);
       return;
     }
 
@@ -61,15 +66,16 @@ export const useUserProfile = (
       } else {
         setError("Failed to fetch profile");
       }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       setError("Network error");
     } finally {
       setLoading(false);
     }
-  }, [token, navigate]);
+  }, [navigate]);
 
   const updateProfile = async (data: UpdateProfilePayload): Promise<void> => {
+    const token = getToken();
     if (!token) throw new Error("No token found");
 
     const response = await fetch(`${API_BASE_URL}/profile`, {
@@ -102,6 +108,8 @@ export const useUserProfile = (
   };
 
   const uploadImage = async (file: File): Promise<void> => {
+    const token = getToken();
+
     if (!token) {
       toast.error("Please login to upload image");
       return;
@@ -178,12 +186,18 @@ export const useUserProfile = (
     toast.loading("Logging out...", { duration: 1500 });
     setTimeout(() => {
       localStorage.removeItem("token");
+      setUser(null);
       navigate?.("/login");
     }, 1500);
   };
 
   useEffect(() => {
-    fetchProfile();
+    const token = getToken();
+    if (token) {
+      fetchProfile();
+    } else {
+      setLoading(false);
+    }
   }, [fetchProfile]);
 
   return {
@@ -192,6 +206,7 @@ export const useUserProfile = (
     error,
     uploadingImage,
     avatarUrl: getUserAvatar(user),
+    isAuthenticated,
     refetch: fetchProfile,
     updateProfile,
     uploadImage,
