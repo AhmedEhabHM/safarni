@@ -14,7 +14,6 @@ interface NavbarProps {
 }
 
 export const Navbar = ({
-  userPhotoUrl,
   onSearchClick,
   onFilterClick,
   onUserClick,

@@ -3,19 +3,25 @@ import { useNavigate } from "react-router-dom";
 import UserButton from "./UserButton";
 
 interface NavbarActionsProps {
-  userPhotoUrl?: string;
   onSearchClick?: () => void;
   onFilterClick?: () => void;
   onUserClick?: () => void;
 }
 
 export const NavbarActions = ({
-  userPhotoUrl,
   onSearchClick,
   onFilterClick,
   onUserClick,
 }: NavbarActionsProps) => {
   const navigate = useNavigate();
+  const { loading, avatarUrl } = useUserProfile();
+
+  const handleUserClick = () => {
+    onUserClick?.();
+
+    const token = localStorage.getItem('token');
+    navigate(token ? "/profile" : "/auth/login");
+  };
 
   return (
     <div className="flex items-center gap-6 sm:gap-8 lg:gap-10 w-auto lg:w-[180px] h-9">
@@ -29,6 +35,7 @@ export const NavbarActions = ({
       >
         <SearchIcon className="w-5 h-5" />
       </button>
+
       <button
         onClick={onFilterClick}
         className="flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity flex-shrink-0"
