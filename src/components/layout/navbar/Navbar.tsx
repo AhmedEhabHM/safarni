@@ -5,6 +5,7 @@ import { NavigationLinks } from "./NavigationLinks";
 import { NavbarActions } from "./NavbarActions";
 import { MenuIcon, CloseIcon, SearchIcon, FilterIcon } from "../../icons";
 import UserButton from "./UserButton";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
 interface NavbarProps {
   userPhotoUrl?: string;
@@ -20,6 +21,7 @@ export const Navbar = ({
 }: NavbarProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const { avatarUrl } = useUserProfile();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 w-full h-14 sm:h-16 md:h-20 bg-white">
@@ -34,7 +36,7 @@ export const Navbar = ({
         {/* Desktop Actions */}
         <div className="hidden lg:block">
           <NavbarActions
-            userPhotoUrl={userPhotoUrl}
+            userPhotoUrl={avatarUrl}
             onSearchClick={onSearchClick}
             onFilterClick={onFilterClick}
             onUserClick={onUserClick}
@@ -61,7 +63,7 @@ export const Navbar = ({
             <FilterIcon className="w-5 h-5" />
           </button>
           <UserButton
-            userPhotoUrl={userPhotoUrl}
+            userPhotoUrl={avatarUrl}
             onUserClick={onUserClick}
             style={"w-5 h-5 sm:w-6 sm:h-6 rounded-full object-cover"}
           />

@@ -11,29 +11,40 @@ import CheckInOutContent from "../../components/hotel/CheckInOutForm";
 import { hotelApi } from "../../services/hotelApi";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { useAppSelector } from "../../hooks/useAppSelector";
-import { 
-  setCurrentHotel, 
-  setLoading, 
-  setError, 
+import {
+  setCurrentHotel,
+  setLoading,
+  setError,
   setReviews,
-  clearHotelData 
+  clearHotelData,
 } from "../../store/slices/hotelSlice";
-import { addHotelReview, markReviewAsHelpful, uploadHotelPhoto } from "@/store/slices/hotelActions";
+import {
+  addHotelReview,
+  markReviewAsHelpful,
+  uploadHotelPhoto,
+} from "@/store/slices/hotelActions";
 
 const HotelAboutPage: React.FC = () => {
-  const { hotelId, tab = "about" } = useParams<{ hotelId: string; tab?: string }>();
+  const { hotelId, tab = "about" } = useParams<{
+    hotelId: string;
+    tab?: string;
+  }>();
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  
-  const { currentHotel: hotel, reviews: reviewsData, loading: loadingHotel } = useAppSelector((state) => state.hotel);
-  
+
+  const {
+    currentHotel: hotel,
+    reviews: reviewsData,
+    loading: loadingHotel,
+  } = useAppSelector((state) => state.hotel);
+
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [showBooking, setShowBooking] = useState(false);
 
   const activeTab = tab;
   const hotelFromState = location.state?.hotelData;
-  
+
   const initializedRef = useRef(false);
   const hotelIdRef = useRef<string | undefined>(hotelId);
 
@@ -50,13 +61,17 @@ const HotelAboutPage: React.FC = () => {
       hotelIdRef.current = hotelId;
     }
 
-    if (hotel && hotel.id?.toString() === hotelId?.toString() && initializedRef.current) {
+    if (
+      hotel &&
+      hotel.id?.toString() === hotelId?.toString() &&
+      initializedRef.current
+    ) {
       return;
     }
-    
+
     if (hotelId && !initializedRef.current) {
       initializedRef.current = true;
-      
+
       if (hotelFromState) {
         initializeHotelData(hotelFromState);
       } else if (hotel && hotel.id?.toString() === hotelId?.toString()) {
@@ -67,7 +82,7 @@ const HotelAboutPage: React.FC = () => {
     } else if (!hotelId) {
       dispatch(setError("Hotel ID is required"));
     }
-    
+
     return () => {
       if (hotelIdRef.current !== hotelId) {
         initializedRef.current = false;
@@ -77,47 +92,68 @@ const HotelAboutPage: React.FC = () => {
 
   const initializeHotelData = (hotelData: any) => {
     dispatch(setLoading(true));
-    
+
     try {
-      if (!hotelData || typeof hotelData !== 'object') {
-        throw new Error('Invalid hotel data format');
+      if (!hotelData || typeof hotelData !== "object") {
+        throw new Error("Invalid hotel data format");
       }
 
       const formattedHotel = {
         id: Number(hotelData.id || hotelId || 0),
-        name: hotelData.name || `Hotel ${hotelId || 'Unknown'}`,
+        name: hotelData.name || `Hotel ${hotelId || "Unknown"}`,
         location: hotelData.location || "Location not available",
         rating: parseFloat(hotelData.rating) || 4.5,
-        about: hotelData.description || hotelData.content_info || hotelData.about || 
-               `Welcome to ${hotelData.name || `Hotel ${hotelId}`}. This is a luxurious hotel offering premium amenities and exceptional service.`,
+        about:
+          hotelData.description ||
+          hotelData.content_info ||
+          hotelData.about ||
+          `Welcome to ${
+            hotelData.name || `Hotel ${hotelId}`
+          }. This is a luxurious hotel offering premium amenities and exceptional service.`,
         phone: hotelData.phone || "+123 456 7890",
-        amenities: Array.isArray(hotelData.amenities) ? hotelData.amenities : [
-          "Free WiFi",
-          "Swimming Pool",
-          "Spa & Wellness",
-          "Restaurant",
-          "Fitness Center",
-          "Room Service",
-          "Concierge",
-          "Parking"
-        ],
-        gallery: Array.isArray(hotelData.gallery) ? hotelData.gallery : (hotelData.image ? [hotelData.image] : [
-          'https://images.unsplash.com/photo-1566073771259-6a8506099945',
-          'https://images.unsplash.com/photo-1571896349842-33c89424de2d',
-          'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb',
-          'https://images.unsplash.com/photo-1564501049418-3c27787d01e8'
-        ]),
-        pricePerNight: hotelData.pricePerNight || Math.floor(Math.random() * 200) + 100,
-        discountPercentage: hotelData.discountPercentage || (Math.random() > 0.5 ? 20 : 0),
+        amenities: Array.isArray(hotelData.amenities)
+          ? hotelData.amenities
+          : [
+              "Free WiFi",
+              "Swimming Pool",
+              "Spa & Wellness",
+              "Restaurant",
+              "Fitness Center",
+              "Room Service",
+              "Concierge",
+              "Parking",
+            ],
+        gallery: Array.isArray(hotelData.gallery)
+          ? hotelData.gallery
+          : hotelData.image
+          ? [hotelData.image]
+          : [
+              "https://images.unsplash.com/photo-1566073771259-6a8506099945",
+              "https://images.unsplash.com/photo-1571896349842-33c89424de2d",
+              "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb",
+              "https://images.unsplash.com/photo-1564501049418-3c27787d01e8",
+            ],
+        pricePerNight:
+          hotelData.pricePerNight || Math.floor(Math.random() * 200) + 100,
+        discountPercentage:
+          hotelData.discountPercentage || (Math.random() > 0.5 ? 20 : 0),
         nights: hotelData.nights || 3,
         taxesAndFees: hotelData.taxesAndFees || 45,
-        rooms: Array.isArray(hotelData.rooms) ? hotelData.rooms : [
-          { id: 1, name: "Standard Room" },
-          { id: 2, name: "Deluxe Room" },
-          { id: 3, name: "Executive Suite" }
-        ],
-        image: hotelData.image || 'https://images.unsplash.com/photo-1566073771259-6a8506099945',
-        content_info: hotelData.content_info || hotelData.about || hotelData.description || '',
+        rooms: Array.isArray(hotelData.rooms)
+          ? hotelData.rooms
+          : [
+              { id: 1, name: "Standard Room" },
+              { id: 2, name: "Deluxe Room" },
+              { id: 3, name: "Executive Suite" },
+            ],
+        image:
+          hotelData.image ||
+          "https://images.unsplash.com/photo-1566073771259-6a8506099945",
+        content_info:
+          hotelData.content_info ||
+          hotelData.about ||
+          hotelData.description ||
+          "",
         distance: hotelData.distance || "1.2 km from city center",
       };
 
@@ -127,23 +163,25 @@ const HotelAboutPage: React.FC = () => {
     } catch (error: any) {
       console.error("Error initializing hotel data:", error);
       dispatch(setError("Failed to load hotel data"));
-      
+
       const fallbackHotel = {
         id: Number(hotelId || 0),
-        name: `Hotel ${hotelId || 'Unknown'}`,
+        name: `Hotel ${hotelId || "Unknown"}`,
         location: "City Center",
         rating: 4.5,
-        about: `Experience luxury at Hotel ${hotelId || 'Unknown'}`,
+        about: `Experience luxury at Hotel ${hotelId || "Unknown"}`,
         amenities: ["Free WiFi", "Swimming Pool", "Restaurant"],
-        gallery: ['https://images.unsplash.com/photo-1566073771259-6a8506099945'],
+        gallery: [
+          "https://images.unsplash.com/photo-1566073771259-6a8506099945",
+        ],
         pricePerNight: 150,
         discountPercentage: 0,
         nights: 3,
         taxesAndFees: 45,
         rooms: [{ id: 1, name: "Standard Room" }],
-        image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945',
+        image: "https://images.unsplash.com/photo-1566073771259-6a8506099945",
       };
-      
+
       dispatch(setCurrentHotel(fallbackHotel));
     } finally {
       dispatch(setLoading(false));
@@ -183,58 +221,59 @@ const HotelAboutPage: React.FC = () => {
         helpful: Math.floor(Math.random() * 20) + 3,
       },
     ];
-    
+
     dispatch(setReviews(defaultReviews));
   };
 
   const fetchHotelData = async () => {
     if (!hotelId) return;
-    
+
     dispatch(setLoading(true));
-    
+
     try {
       let hotel;
-      
+
       try {
         const hotelResponse = await hotelApi.getHotelById(hotelId);
         hotel = hotelResponse.data;
       } catch (apiError) {
-        console.error('API error, checking localStorage:', apiError);
-        
+        console.error("API error, checking localStorage:", apiError);
+
         try {
-          const savedHotels = localStorage.getItem('hotelsList');
+          const savedHotels = localStorage.getItem("hotelsList");
           if (savedHotels) {
             const hotels = JSON.parse(savedHotels);
-            const foundHotel = hotels.find((h: any) => h.id.toString() === hotelId.toString());
+            const foundHotel = hotels.find(
+              (h: any) => h.id.toString() === hotelId.toString()
+            );
             if (foundHotel) {
               hotel = foundHotel;
             } else {
-              throw new Error('Hotel not found in localStorage');
+              throw new Error("Hotel not found in localStorage");
             }
           } else {
-            throw new Error('No saved hotels data');
+            throw new Error("No saved hotels data");
           }
         } catch (localStorageError) {
-          console.error('localStorage error:', localStorageError);
-          throw new Error('Cannot fetch hotel data from any source');
+          console.error("localStorage error:", localStorageError);
+          throw new Error("Cannot fetch hotel data from any source");
         }
       }
-      
+
       initializeHotelData(hotel);
-      
     } catch (error) {
       console.error("Error in fetchHotelData:", error);
       dispatch(setError("Failed to load hotel data"));
-      
+
       const fallbackHotel = {
         id: Number(hotelId),
         name: `Hotel ${hotelId}`,
         location: "City Center",
         rating: 4.5,
         content_info: `Experience luxury at Hotel ${hotelId}`,
-        rooms: [{ id: 1, name: "Standard Room" }]
+        rooms: [{ id: 1, name: "Standard Room" }],
       };
-      
+
       initializeHotelData(fallbackHotel);
     }
   };
@@ -269,7 +308,7 @@ const HotelAboutPage: React.FC = () => {
   };
 
   const handleHelpful = async (reviewId: number) => {
-    const review = reviewsData.find(r => r.id === reviewId);
+    const review = reviewsData.find((r) => r.id === reviewId);
     if (review) {
       await dispatch(markReviewAsHelpful(reviewId, review.helpful));
     }
@@ -278,9 +317,9 @@ const HotelAboutPage: React.FC = () => {
   const handleAddPhoto = async (photo: File) => {
     try {
       await dispatch(uploadHotelPhoto(photo));
-      alert('Photo added successfully!');
+      alert("Photo added successfully!");
     } catch (error) {
-      alert('Failed to add photo. Please try again.');
+      alert("Failed to add photo. Please try again.");
     }
   };
 
@@ -288,7 +327,9 @@ const HotelAboutPage: React.FC = () => {
 
   const renderContent = () => {
     if (showBooking && hotel) {
-      return <CheckInOutContent hotel={hotel} onBack={() => setShowBooking(false)} />;
+      return (
+        <CheckInOutContent hotel={hotel} onBack={() => setShowBooking(false)} />
+      );
     }
 
     if (loadingHotel) {
@@ -308,7 +349,7 @@ const HotelAboutPage: React.FC = () => {
         <div className="bg-white rounded-xl shadow-md p-6 text-center">
           <p className="text-gray-500">Hotel data not available</p>
           <button
-            onClick={() => navigate('/hotel')}
+            onClick={() => navigate("/hotel")}
             className="mt-4 text-blue-600 hover:text-blue-800"
           >
             Back to Hotels List
@@ -324,7 +365,7 @@ const HotelAboutPage: React.FC = () => {
         return <HotelGallery onAddPhoto={handleAddPhoto} />;
       case "reviews":
         return (
-          <HotelReviews 
+          <HotelReviews
             onReviewFormToggle={setShowReviewForm}
             onAddReview={handleAddReview}
             onHelpful={handleHelpful}
@@ -355,11 +396,16 @@ const HotelAboutPage: React.FC = () => {
             <div className="h-full overflow-hidden rounded-xl lg:rounded-none">
               {hotel ? (
                 <img
-                  src={hotel.gallery?.[0] || hotel.image || 'https://images.unsplash.com/photo-1566073771259-6a8506099945'}
+                  src={
+                    hotel.gallery?.[0] ||
+                    hotel.image ||
+                    "https://images.unsplash.com/photo-1566073771259-6a8506099945"
+                  }
                   alt={hotel.name}
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1566073771259-6a8506099945';
+                    (e.target as HTMLImageElement).src =
+                      "https://images.unsplash.com/photo-1566073771259-6a8506099945";
                   }}
                 />
               ) : (
@@ -380,12 +426,16 @@ const HotelAboutPage: React.FC = () => {
 
                   <div className="flex items-center bg-white px-4 py-2 rounded-lg">
                     <FaStar className="w-5 h-5 text-yellow-500 mr-2" />
-               <span className="text-gray-600 font-bold text-lg mr-2">
-                {typeof hotel.rating === 'number' ? hotel.rating.toFixed(1) : 
-                 !isNaN(parseFloat(hotel.rating)) ? parseFloat(hotel.rating).toFixed(1) : 
-                '4.5'}
-            </span>
-                    <div className="text-gray-600">({reviewsData.length} reviews)</div>
+                    <span className="text-gray-600 font-bold text-lg mr-2">
+                      {typeof hotel.rating === "number"
+                        ? hotel.rating.toFixed(1)
+                        : !isNaN(parseFloat(hotel.rating))
+                        ? parseFloat(hotel.rating).toFixed(1)
+                        : "4.5"}
+                    </span>
+                    <div className="text-gray-600">
+                      ({reviewsData.length} reviews)
+                    </div>
                   </div>
                 </div>
 
@@ -462,7 +512,8 @@ const HotelAboutPage: React.FC = () => {
                       </span>
                     </h4>
                     <p className="text-sm text-gray-500 mt-2">
-                      {hotel.nights || 1} nights • ${hotel.pricePerNight || 0}/night
+                      {hotel.nights || 1} nights • ${hotel.pricePerNight || 0}
+                      /night
                       {(hotel.discountPercentage || 0) > 0 && (
                         <span className="text-green-600 ml-2">
                           • {hotel.discountPercentage}% discount applied
