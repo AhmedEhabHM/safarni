@@ -7,7 +7,7 @@ interface BaseCardProps {
   title: string;
   rating: number;
   location: string;
-  isFavorite:boolean;
+  isFavorite: boolean;
 }
 export interface RecommendationCardProps extends BaseCardProps {
   variant: 'recommendation';
@@ -15,7 +15,7 @@ export interface RecommendationCardProps extends BaseCardProps {
 export interface TourCardProps extends BaseCardProps {
   variant: 'tour';
   price: number;
-  tourType:string
+  tourType: string
 }
 
 
@@ -23,12 +23,14 @@ export type Tour = {
   id: number;
   title: string;
   slug: string;
+  type: string;
+  location: string;
   duration: number;
   visit_season: string;
   image: string;
   rating_average: number;
   reviews_count: number;
-  price: number;
+  is_favourite: boolean
 };
 
 

@@ -13,14 +13,14 @@ const AvaliableTours = () => {
     return (
         <section className=" flex flex-col gap-3 my-8">
             <SectionHeader title="Available Tours" path="/" />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2  gap-8">
                 {isLoading ? [1, 2].map((_, i) => {
                     return (
                         <TourCardSkeleton key={i} />
                     )
                 }) :
                     trips.map((trip, index) => {
-                        return <TourCard isFavorite={false} variant="tour" price={trip.price} tourType={"full day tour"} key={index} image={trip.image} title={trip.title} rating={trip.rating_average} location="luxor" />
+                        return <TourCard isFavorite={false} variant="tour" price={90} tourType={"full day tour"} key={index} image={trip.image} title={trip.title} rating={trip.rating_average} location={trip.location} />
                     })
                 }
             </div>

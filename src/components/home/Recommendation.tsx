@@ -22,7 +22,7 @@ const Recommendation = () => {
                     )
                 }) :
                     trips.map((trip, index) => {
-                        return <TourCard isFavorite={false} variant="recommendation" key={index} image={trip.image} title={trip.title} rating={trip.rating_average} location="cairo"/>
+                        return <TourCard isFavorite={trip.is_favourite} variant="recommendation" key={index} image={trip.image} title={trip.title} rating={trip.rating_average} location={trip.location} />
                     })
                 }
 
