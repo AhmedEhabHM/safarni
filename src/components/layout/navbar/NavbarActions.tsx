@@ -1,8 +1,6 @@
-// components/NavbarActions.tsx
-import { useNavigate } from 'react-router-dom';
 import { SearchIcon, FilterIcon } from "../../icons";
-import { useUserProfile } from '../../../hooks/useUserProfile';
-import { Avatar } from '../../profile/ui/Avatar';
+import { useNavigate } from "react-router-dom";
+import UserButton from "./UserButton";
 
 interface NavbarActionsProps {
   onSearchClick?: () => void;
@@ -45,18 +43,11 @@ export const NavbarActions = ({
       >
         <FilterIcon className="w-5 h-5" />
       </button>
-
-      <button
-        onClick={handleUserClick}
-        className="flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity"
-        aria-label="User profile"
-      >
-        {loading ? (
-          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-200 animate-pulse" />
-        ) : (
-          <Avatar src={avatarUrl} size="sm" />
-        )}
-      </button>
+      <UserButton
+        userPhotoUrl={userPhotoUrl}
+        onUserClick={onUserClick}
+        style={"w-6 h-6 sm:w-8 sm:h-8 rounded-full object-cover"}
+      />
     </div>
   );
 };
