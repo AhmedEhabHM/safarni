@@ -6,8 +6,9 @@ import { hotelApi } from '@/services/hotelApi';
 import type { PaginationLinks } from '@/services/hotelApi';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { setCurrentHotel } from '@/store/slices/hotelSlice';
+import type { Hotel } from '@/types/hotel.types'; // استيراد النوع الحقيقي
 
-interface Hotel {
+interface LocalHotel {
   id: number;
   name: string;
   location: string;
@@ -27,7 +28,7 @@ const HotelPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const [hotels, setHotels] = useState<Hotel[]>([]);
+  const [hotels, setHotels] = useState<LocalHotel[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [links, setLinks] = useState<PaginationLinks | null>(null);
@@ -38,7 +39,7 @@ const HotelPage: React.FC = () => {
     loadInitialHotels();
   }, []);
 
-  const formatHotels = (data: Hotel[]) =>
+  const formatHotels = (data: LocalHotel[]) =>
     data.map(hotel => ({
       ...hotel,
       rating: normalizeRating(hotel.rating),
@@ -107,15 +108,23 @@ const HotelPage: React.FC = () => {
     }
   };
 
-  const handleHotelClick = (hotel: Hotel) => {
-    dispatch(
-      setCurrentHotel({
-        ...hotel,
-        amenities: hotel.content_info ? [hotel.content_info] : ['Luxury'],
-        gallery: hotel.image ? [hotel.image] : undefined,
-      })
-    );
-
+  const handleHotelClick = (hotel: LocalHotel) => {
+    // بناء كائن متوافق مع نوع Hotel (مع التأكد من وجود جميع الحقول المطلوبة)
+    const hotelData: Hotel = {
+      id: hotel.id,
+      name: hotel.name,
+      location: hotel.location,
+      rating: hotel.rating,
+      image: hotel.image || 'https://images.unsplash.com/photo-1566073771259-6a8506099945',
+      content_info: hotel.content_info,
+      pricePerNight: hotel.pricePerNight || 150, // تأكد من أنها number
+      amenities: hotel.content_info ? [hotel.content_info] : ['Luxury'],
+      gallery: hotel.image ? [hotel.image] : undefined,
+      discountPercentage: 0,
+      nights: 1,
+      taxesAndFees: 0,
+    };
+    dispatch(setCurrentHotel(hotelData));
     navigate(`/hotel/${hotel.id}/about`);
   };
 

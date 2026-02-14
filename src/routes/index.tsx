@@ -27,8 +27,8 @@ import CompareToursPage from '@/pages/compare/CompareToursPage';
 import Search from '@/pages/Search/Search';
 import Destination from '@/pages/destination/Destination';
 import ProfileSettings from '@/components/profile/ProfileSettings';
-import { PersonalInformation } from '@/components/profile';
-import { AccountSecurity } from '@/components/profile/AccountSecurity';
+import PersonalInfoPage from '@/pages/profile/PersonalInfoPage';
+import AccountSecurityPage from '@/pages/profile/AccountSecurityPage';
 import PaymentPage from '@/components/checkout/PaymentPage';
 import SuccessPage from '@/components/checkout/pages/SuccessPage';
 import ErrorPage from '@/components/checkout/pages/ErrorPage';
@@ -88,8 +88,8 @@ export default function AppRoutes() {
       {/* Protected routes */}
       <Route element={<ProtectedRoutes />}>
         <Route path="/profile" element={<ProfileSettings />} />
-        <Route path="/personal-info" element={<PersonalInformation />} />
-        <Route path="/security" element={<AccountSecurity />} />
+        <Route path="/personal-info" element={<PersonalInfoPage />} />
+        <Route path="/security" element={<AccountSecurityPage />} />
       </Route>
     </Routes>
   );

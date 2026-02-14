@@ -2,7 +2,10 @@ import type { RecommendationCardProps, TourCardProps } from "@/types/home.type";
 import { FaStar } from "react-icons/fa";
 import { IoLocationOutline } from "react-icons/io5";
 
-type TCardProps = RecommendationCardProps | TourCardProps;
+type TCardProps = (RecommendationCardProps | TourCardProps) & {
+  tourType?: string;
+  isFavorite?: boolean;
+};
 
 const TourCard = (props: TCardProps) => {
   const { variant, image, location, rating, title } = props;

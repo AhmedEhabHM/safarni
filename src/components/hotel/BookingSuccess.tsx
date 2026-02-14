@@ -1,3 +1,4 @@
+// src/components/hotel/BookingSuccess.tsx
 import React, { useState } from "react";
 import { FiUser, FiUserCheck, FiUserPlus, FiInfo } from "react-icons/fi";
 
@@ -19,8 +20,10 @@ const BookingSuccess: React.FC<BookingSuccessProps> = ({
       alert("At least one adult is required for booking.");
       return;
     }
+    
     try {
-      await onSubmit({ adults, children, infants });
+      const guestData = { adults, children, infants };
+      await onSubmit(guestData);
     } catch (error) {
       console.error("Booking failed:", error);
     }
@@ -70,7 +73,22 @@ const BookingSuccess: React.FC<BookingSuccessProps> = ({
   );
 
   return (
-    <div className="bg-white rounded-xl shadow-lg mx-auto p-10 flex flex-col gap-8 items-center text-center w-[604px]">
+    <div 
+      className="bg-white rounded-xl shadow-lg mx-auto"
+      style={{
+        width: "604px",
+        height: "auto",
+        opacity: 1,
+        borderRadius: "8px",
+        padding: "40px",
+        gap: "32px",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        textAlign: "center"
+      }}
+    >
       <div className="w-full mb-8">        
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 flex items-start">
           <FiInfo className="w-5 h-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
@@ -131,7 +149,7 @@ const BookingSuccess: React.FC<BookingSuccessProps> = ({
               Processing Booking...
             </>
           ) : (
-            'Book Now'
+            ' Book Now'
           )}
         </button>
       </div>

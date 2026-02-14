@@ -10,7 +10,9 @@ const AvaliableTours = () => {
       rating: 4.3,
       location: 'Luxor',
       title: 'Full Day Tour',
-      price: 150
+      price: 150,
+      tourType: 'day',
+      isFavorite: false
     },
     {
       variant: 'tour',
@@ -18,7 +20,9 @@ const AvaliableTours = () => {
       title: 'Full Day Tour',
       rating: 4.5,
       location: 'Dahab',
-      price: 250
+      price: 250,
+      tourType: 'day',
+      isFavorite: false
     },
     {
       variant: 'tour',
@@ -26,7 +30,9 @@ const AvaliableTours = () => {
       title: 'Full Day Tour',
       rating: 4.2,
       location: 'Fayoum',
-      price: 200
+      price: 200,
+      tourType: 'day',
+      isFavorite: false
     },
     {
       variant: 'tour',
@@ -34,7 +40,9 @@ const AvaliableTours = () => {
       title: 'Full Day Tour',
       rating: 4.6,
       location: 'Marsa Alam',
-      price: 220
+      price: 220,
+      tourType: 'day',
+      isFavorite: false
     }
   ];
   
@@ -44,13 +52,15 @@ const AvaliableTours = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {toursData.map((trip, index) => (
           <TourCard 
+            key={index}
             variant={trip.variant} 
-            key={index} 
             image={trip.image} 
             title={trip.title} 
             rating={trip.rating} 
             location={trip.location} 
-            price={trip.price} 
+            price={trip.price}
+            tourType={trip.tourType}
+            isFavorite={trip.isFavorite}
           />
         ))}
       </div>

@@ -9,28 +9,32 @@ const Recommendation = () => {
       title: 'The Pyramids',
       rating: 4.8,
       location: 'Giza',
-      variant: "recommendation"
+      variant: "recommendation",
+      isFavorite: false
     },
     {
       image: 'https://images.unsplash.com/photo-1539768942893-daf53e448371?w=500',
       title: 'The Citadel of Saladin',
       rating: 4.8,
       location: 'Cairo',
-      variant: "recommendation"
+      variant: "recommendation",
+      isFavorite: false
     },
     {
       image: 'https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=500',
       title: 'Karnak Temple',
       rating: 4.3,
       location: 'Luxor',
-      variant: "recommendation"
+      variant: "recommendation",
+      isFavorite: false
     },
     {
       image: 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=500',
       title: 'Library of Alexandria',
       rating: 4.8,
       location: 'Alexandria',
-      variant: "recommendation"
+      variant: "recommendation",
+      isFavorite: false
     }
   ];
   
@@ -40,12 +44,13 @@ const Recommendation = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {recommendationsData.map((trip, index) => (
           <TourCard 
+            key={index}
             variant={trip.variant} 
-            key={index} 
             image={trip.image} 
             title={trip.title} 
             rating={trip.rating} 
-            location={trip.location} 
+            location={trip.location}
+            isFavorite={trip.isFavorite}
           />
         ))}
       </div>

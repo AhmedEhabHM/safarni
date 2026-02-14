@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { searchFlights } from "@/api/flight-booking/search-flights.ts";
+import type { FlightSearchRequest } from "@/types/flight-booking/flight-search-request";
 
 const formSchema = z.object({
   type: z.enum(["round-trip", "one-way"]),
@@ -42,7 +43,11 @@ export function FlightBookingForm() {
     },
 
     onSubmit: ({ value }) => {
-      const payload = { ...value, passengers: Number(value.passengers) };
+      const payload: FlightSearchRequest = {
+        ...value,
+        passengers: Number(value.passengers),
+        type: value.type as "one-way" | "round-trip",
+      };
       searchFlights(payload);
     },
   });
@@ -50,7 +55,10 @@ export function FlightBookingForm() {
   return (
     <div className="flex w-full items-center justify-center p-4 flex-column gap-30">
       <div className="hidden sm:flex">
-        <img src={Plane} alt="plane" />
+        <img
+          src={Plane}
+          alt="plane"
+        />
       </div>
       <Card className="w-full max-w-md rounded-2xl border-none shadow-none bg-transparent">
         <CardContent className="space-y-8 p-0">
