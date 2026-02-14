@@ -1,13 +1,9 @@
-import type {
-  UserProfile,
-  Booking,
-  RawAdditionalInfo,
-} from "../types/profile.types";
+import { TokenService } from '@/services/token.service';
+import type { UserProfile, Booking, RawAdditionalInfo } from '../types/profile.types';
 
-// Token
-export const getToken = (): string | null => {
-  return localStorage.getItem("authToken");
-};
+// Use TokenService instead of local getToken
+export const getToken = (): string | null => TokenService.getToken();
+
 
 // Language Cookie
 export const setTranslateCookie = (langCode: string): void => {

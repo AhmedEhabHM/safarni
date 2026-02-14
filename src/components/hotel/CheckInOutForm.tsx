@@ -1,4 +1,3 @@
-// src/components/hotel/CheckInOutForm.tsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
@@ -9,7 +8,7 @@ import { hotelApi } from "../../services/hotelApi";
 
 interface CheckInOutContentProps {
   hotel: {
-    id: number ;
+    id: number;
     name: string;
     location: string;
     pricePerNight: number;
@@ -32,19 +31,15 @@ const CheckInOutForm: React.FC<CheckInOutContentProps> = ({ hotel, onBack }) => 
   const [availableCheckInDates, setAvailableCheckInDates] = useState<string[]>([]);
   const [availableCheckOutDates, setAvailableCheckOutDates] = useState<string[]>([]);
   const [isBookingConfirmed, setIsBookingConfirmed] = useState(false);
-  const [apiStatus, setApiStatus] = useState<string>("");
-  const [showApiDebug, setShowApiDebug] = useState(false);
 
   useEffect(() => {
     const today = new Date();
     const checkInDates = [];
-    
     for (let i = 1; i <= 4; i++) {
       const date = new Date(today);
       date.setDate(today.getDate() + i);
       checkInDates.push(date.toISOString().split('T')[0]);
     }
-    
     setAvailableCheckInDates(checkInDates);
     
     const checkOutDates = [];
@@ -53,34 +48,17 @@ const CheckInOutForm: React.FC<CheckInOutContentProps> = ({ hotel, onBack }) => 
       date.setDate(today.getDate() + i);
       checkOutDates.push(date.toISOString().split('T')[0]);
     }
-    
     setAvailableCheckOutDates(checkOutDates);
     
-    if (checkInDates.length > 0) {
-      setCheckIn(checkInDates[0]);
-    }
-    if (checkOutDates.length > 0) {
-      setCheckOut(checkOutDates[0]);
-    }
+    if (checkInDates.length > 0) setCheckIn(checkInDates[0]);
+    if (checkOutDates.length > 0) setCheckOut(checkOutDates[0]);
   }, []);
-
-  const checkAvailableAPIs = async () => {
-    setApiStatus("Checking available APIs...");
-    try {
-      const results = await hotelApi.checkBookingAPIs();
-      setApiStatus(`Available APIs: ${results.filter(r => r.exists).map(r => r.endpoint).join(', ') || 'None found'}`);
-      setShowApiDebug(true);
-    } catch (error) {
-      setApiStatus(`Error checking APIs`);
-    }
-  };
 
   const calculateTotalPrice = () => {
     const basePrice = hotel.pricePerNight * hotel.nights;
     const discountAmount = (basePrice * hotel.discountPercentage) / 100;
     const discountedPrice = basePrice - discountAmount;
     const totalPrice = discountedPrice + hotel.taxesAndFees;
-
     return totalPrice;
   };
 
@@ -101,8 +79,6 @@ const CheckInOutForm: React.FC<CheckInOutContentProps> = ({ hotel, onBack }) => 
   };
 
   const handleBookingSubmit = async (data: { adults: number; children: number; infants: number }) => {
-    setApiStatus("Processing booking...");
-    
     try {
       const roomId = typeof hotel.rooms?.[0]?.id === 'string' 
         ? parseInt(hotel.rooms?.[0]?.id) 
@@ -119,19 +95,11 @@ const CheckInOutForm: React.FC<CheckInOutContentProps> = ({ hotel, onBack }) => 
       };
       
       const response = await dispatch(createHotelBooking(bookingData));
-      
-      // استخراج booking ID من الرد
       const bookingId = response?.data?.id || response?.data?.booking_id || Date.now();
-      
-      // عرض رسالة النجاح
-      alert(`✅ Booking ${response?.status === "success" ? "Successful" : "Simulated"}!\nBooking ID: ${bookingId}\nTotal amount: $${totalPrice.toFixed(2)}\nStatus: ${response?.data?.booking_status || "pending"}`);
-      
-      // التوجيه إلى صفحة الدفع
+      alert(`✅ Booking Successful!\nBooking ID: ${bookingId}\nTotal amount: $${totalPrice.toFixed(2)}`);
       navigate(`/payment/${bookingId}`);
-      
     } catch (error: any) {
       console.error('Booking failed:', error);
-      setApiStatus(`❌ Fatal Error: ${error.message}`);
       alert(`❌ Booking failed: ${error.message || 'Please try again.'}`);
     }
   };
@@ -140,11 +108,6 @@ const CheckInOutForm: React.FC<CheckInOutContentProps> = ({ hotel, onBack }) => 
     return (
       <div className="flex justify-center items-center">
         <BookingSuccess
-          hotelName={hotel.name}
-          onBack={() => {
-            setIsBookingConfirmed(false);
-            onBack();
-          }}
           onSubmit={handleBookingSubmit}
           isLoading={bookingLoading}
         />
@@ -154,20 +117,7 @@ const CheckInOutForm: React.FC<CheckInOutContentProps> = ({ hotel, onBack }) => 
 
   return (
     <div className="bg-white rounded-xl shadow-md p-6">
-      <div 
-        className="mb-6 p-4 rounded-lg"
-        style={{
-          background: "white",
-          fontFamily: "Poppins",
-          fontWeight: 500,
-          fontStyle: "normal",
-          fontSize: "25px",
-          lineHeight: "136%",
-          letterSpacing: "0%",
-          textAlign: "center",
-          color: "var(--700, #1E429F)"
-        }}
-      >
+      <div className="mb-6 p-4 rounded-lg text-center text-[25px] font-medium text-[#1E429F]">
         Book Hotel
       </div>
 
@@ -197,11 +147,7 @@ const CheckInOutForm: React.FC<CheckInOutContentProps> = ({ hotel, onBack }) => 
               </button>
             ))}
           </div>
-          <input
-            type="hidden"
-            value={checkIn}
-            required
-          />
+          <input type="hidden" value={checkIn} required />
         </div>
 
         <div>
@@ -229,11 +175,7 @@ const CheckInOutForm: React.FC<CheckInOutContentProps> = ({ hotel, onBack }) => 
               </button>
             ))}
           </div>
-          <input
-            type="hidden"
-            value={checkOut}
-            required
-          />
+          <input type="hidden" value={checkOut} required />
         </div>    
         
         <div className="mb-4">
@@ -244,7 +186,6 @@ const CheckInOutForm: React.FC<CheckInOutContentProps> = ({ hotel, onBack }) => 
 
         <div className="mb-6">
           <textarea
-            name="comment"
             placeholder="Enter your review here..."
             value={comment}
             onChange={(e) => setComment(e.target.value)}
@@ -275,32 +216,13 @@ const CheckInOutForm: React.FC<CheckInOutContentProps> = ({ hotel, onBack }) => 
           </div>
         </div>
 
-        {apiStatus && (
-          <div className={`p-3 rounded-lg ${
-            apiStatus.includes('✅') ? 'bg-green-50 border border-green-200' :
-            apiStatus.includes('❌') ? 'bg-red-50 border border-red-200' :
-            'bg-yellow-50 border border-yellow-200'
-          }`}>
-            <p className={`text-sm ${
-              apiStatus.includes('✅') ? 'text-green-800' :
-              apiStatus.includes('❌') ? 'text-red-800' :
-              'text-yellow-800'
-            }`}>
-              {apiStatus}
-            </p>
-          </div>
-        )}
-
         {bookingError && (
           <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
             <p className="text-sm text-red-800">{bookingError}</p>
           </div>
         )}
 
-      
-
         <div className="flex gap-4 pt-4">
-        
           <button
             type="submit"
             disabled={bookingLoading}
@@ -311,8 +233,6 @@ const CheckInOutForm: React.FC<CheckInOutContentProps> = ({ hotel, onBack }) => 
             {bookingLoading ? 'Processing...' : 'Continue to Guests Selection'}
           </button>
         </div>
-
-     
       </form>
     </div>
   );

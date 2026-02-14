@@ -1,8 +1,11 @@
-// src/services/hotelApi.ts
-const BASE_URL = 'https://round8-safarni-team-three.huma-volve.com/api';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
+if (!BASE_URL) {
+  console.error('VITE_BASE_URL is not defined in environment variables');
+}
+
+// ... rest of the code remains the same, only BASE_URL definition changed
 /* ========= Types ========= */
-
 export interface PaginationLinks {
   first: string;
   last: string;
@@ -47,37 +50,29 @@ export interface ApiResponse<T> {
 
 const request = async <T>(url: string): Promise<ApiResponse<T>> => {
   const response = await fetch(url);
-
   if (!response.ok) {
     throw new Error(`API Error: ${response.status}`);
   }
-
   return response.json();
 };
 
 export const hotelApi = {
-  getAllHotels: (page: number = 1) =>
+  getAllHotels: (page: number = 1): Promise<ApiResponse<Hotel[]>> =>
     request<Hotel[]>(`${BASE_URL}/hotel?page=${page}`),
 
-  // Search hotels
-  searchHotels: (query: string) =>
+  searchHotels: (query: string): Promise<ApiResponse<Hotel[]>> =>
     request<Hotel[]>(`${BASE_URL}/hotel?search=${encodeURIComponent(query)}`),
 
-  // Get single hotel by ID
-  getHotelById: (id: string | number) =>
+  getHotelById: (id: string | number): Promise<ApiResponse<Hotel>> =>
     request<Hotel>(`${BASE_URL}/hotel/${id}`),
 
-  // Pagination using backend links (next / prev)
-  getByUrl: (url: string) =>
-    request(url),
+  getByUrl: (url: string): Promise<ApiResponse<Hotel[]>> => request(url),
 
   addHotelReview: async (hotelId: string | number, reviewData: any) => {
     try {
       const response = await fetch(`${BASE_URL}/hotel/${hotelId}/reviews`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(reviewData),
       });
       if (!response.ok) throw new Error('Failed to add review');
@@ -112,39 +107,26 @@ export const hotelApi = {
   }) => {
     const response = await fetch(`${BASE_URL}/hotel-bookings`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify(bookingData),
     });
-
     const data = await response.json();
-
-    if (!response.ok) {
-      throw data; 
-    }
-
+    if (!response.ok) throw data;
     return data;
   },
 
   checkBookingAPIs: async () => {
     const endpoints = [
       '/hotel-bookings',
-      '/hotel/bookings', 
+      '/hotel/bookings',
       '/bookings',
       '/booking',
       '/reservations'
     ];
-
     const results = [];
-    
     for (const endpoint of endpoints) {
       try {
-        const response = await fetch(`${BASE_URL}${endpoint}`, {
-          method: 'OPTIONS',
-        });
-        
+        const response = await fetch(`${BASE_URL}${endpoint}`, { method: 'OPTIONS' });
         results.push({
           endpoint,
           exists: response.ok,
@@ -152,13 +134,9 @@ export const hotelApi = {
           statusText: response.statusText
         });
       } catch (error) {
-        results.push({
-          endpoint,
-          exists: false,
-        });
+        results.push({ endpoint, exists: false });
       }
     }
-    
     return results;
   }
 };

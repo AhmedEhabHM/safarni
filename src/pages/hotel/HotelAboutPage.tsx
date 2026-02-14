@@ -1,33 +1,25 @@
-// src/pages/HotelAboutPage.tsx
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, Link, useLocation } from "react-router-dom";
-import { FiArrowLeft } from "react-icons/fi";
-import { FaStar } from "react-icons/fa";
-import HotelAbout from "../../components/hotel/HotelAbout";
-import HotelGallery from "../../components/hotel/HotelGallery";
-import HotelReviews from "../../components/hotel/HotelReviews";
-import CheckInOutContent from "../../components/hotel/CheckInOutForm";
-import { hotelApi } from "../../services/hotelApi";
-import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { useAppSelector } from "../../hooks/useAppSelector";
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
+import { FiArrowLeft } from 'react-icons/fi';
+import { FaStar } from 'react-icons/fa';
+import HotelAbout from '@/components/hotel/HotelAbout';
+import HotelGallery from '@/components/hotel/HotelGallery';
+import HotelReviews from '@/components/hotel/HotelReviews';
+import CheckInOutContent from '@/components/hotel/CheckInOutForm';
+import { hotelApi } from '@/services/hotelApi';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
+import { useAppSelector } from '@/hooks/useAppSelector';
 import {
   setCurrentHotel,
   setLoading,
   setError,
   setReviews,
   clearHotelData,
-} from "../../store/slices/hotelSlice";
-import {
-  addHotelReview,
-  markReviewAsHelpful,
-  uploadHotelPhoto,
-} from "@/store/slices/hotelActions";
+} from '@/store/slices/hotelSlice';
+import { addHotelReview, markReviewAsHelpful, uploadHotelPhoto } from '@/store/slices/hotelActions';
 
 const HotelAboutPage: React.FC = () => {
-  const { hotelId, tab = "about" } = useParams<{
-    hotelId: string;
-    tab?: string;
-  }>();
+  const { hotelId, tab = "about" } = useParams<{ hotelId: string; tab?: string }>();
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -38,7 +30,6 @@ const HotelAboutPage: React.FC = () => {
     loading: loadingHotel,
   } = useAppSelector((state) => state.hotel);
 
-  const [showReviewForm, setShowReviewForm] = useState(false);
   const [showBooking, setShowBooking] = useState(false);
 
   const activeTab = tab;
@@ -116,7 +107,6 @@ const HotelAboutPage: React.FC = () => {
 
       dispatch(setCurrentHotel(formattedHotel));
       
-      // Initialize reviews after hotel data is set
       const defaultReviews = [
         {
           id: 1,
@@ -267,7 +257,7 @@ const HotelAboutPage: React.FC = () => {
       case "reviews":
         return (
           <HotelReviews
-            onReviewFormToggle={setShowReviewForm}
+            onReviewFormToggle={() => {}} // فارغة
             onAddReview={handleAddReview}
             onHelpful={handleHelpful}
           />

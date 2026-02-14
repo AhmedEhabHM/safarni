@@ -6,7 +6,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import {
   Field,
   FieldError,
-  FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -19,8 +18,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { searchFlights } from "@/api/flight-booking/search-flights.ts";
-import { useNavigate } from "react-router-dom";
-
 
 const formSchema = z.object({
   type: z.enum(["round-trip", "one-way"]),
@@ -31,7 +28,6 @@ const formSchema = z.object({
 });
 
 export function FlightBookingForm() {
-  const navigate = useNavigate();
   const form = useForm({
     defaultValues: {
       type: "round-trip",
@@ -45,35 +41,16 @@ export function FlightBookingForm() {
       onSubmit: formSchema,
     },
 
-    onSubmit: async ({ value }) => {
-      try {
-        const payload = { ...value, passengers: Number(value.passengers) };
-        const res = await searchFlights(payload);
-
-        if (res.data.status === "success") {
-          navigate("/flight-booking", {
-            state: {
-              results: res.data.data, // 👈 هنا الداتا
-            },
-          });
-        }
-      } catch (error) {
-        console.error(error);
-      }
+    onSubmit: ({ value }) => {
+      const payload = { ...value, passengers: Number(value.passengers) };
+      searchFlights(payload);
     },
-    // onSubmit: ({ value }) => {
-    //   console.log("Search Flights:", value);
-    //   searchFlights(value);
-    // },
   });
 
   return (
     <div className="flex w-full items-center justify-center p-4 flex-column gap-30">
       <div className="hidden sm:flex">
-        <img
-          src={Plane}
-          alt="plane"
-        />
+        <img src={Plane} alt="plane" />
       </div>
       <Card className="w-full max-w-md rounded-2xl border-none shadow-none bg-transparent">
         <CardContent className="space-y-8 p-0">

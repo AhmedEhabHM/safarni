@@ -1,5 +1,7 @@
+import { TokenService } from '@/services/token.service';
+
 export const useAuth = () => {
-  const token = localStorage.getItem("authToken"); 
-  const isLoggedIn = !!token; 
+  const isLoggedIn = TokenService.isAuthenticated();
+  const token = TokenService.getToken();
   return { isLoggedIn, token };
 };

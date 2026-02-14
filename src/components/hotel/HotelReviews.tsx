@@ -1,4 +1,3 @@
-// src/components/hotel/HotelReviews.tsx
 import React, { useState } from 'react';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import { useForm } from "@tanstack/react-form";
@@ -22,18 +21,15 @@ const HotelReviews: React.FC<HotelReviewsProps> = ({
   const [isAddingReview, setIsAddingReview] = useState(false);
 
   const searchForm = useForm({
-    defaultValues: {
-      searchQuery: "",
-    },
+    defaultValues: { searchQuery: "" },
     onSubmit: async ({ value }) => {
       setSearchQuery(value.searchQuery);
-      return;
     },
   });
 
-  const handleHelpful = async (reviewId: number, currentHelpful: number) => {
+  const handleHelpful = async (reviewId: number) => {
     if (onHelpful) {
-      await onHelpful(reviewId);
+      await onHelpful(reviewId); // currentHelpful غير مستخدم، تم إزالته
     }
   };
 
@@ -69,9 +65,7 @@ const HotelReviews: React.FC<HotelReviewsProps> = ({
               onSubmit={async (data) => {
                 setIsAddingReview(true);
                 try {
-                  if (onAddReview) {
-                    await onAddReview(data);
-                  }
+                  if (onAddReview) await onAddReview(data);
                   setShowReviewForm(false);
                   onReviewFormToggle?.(false);
                 } finally {
@@ -145,7 +139,7 @@ const HotelReviews: React.FC<HotelReviewsProps> = ({
 
                 <div className="flex justify-between items-center">
                   <button
-                    onClick={() => handleHelpful(review.id, review.helpful)}
+                    onClick={() => handleHelpful(review.id)}
                     className="flex items-center text-sm text-gray-600 hover:text-blue-600 transition-colors"
                   >
                     <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

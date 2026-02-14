@@ -1,4 +1,3 @@
-// src/types/hotel.types.ts
 export interface Hotel {
   id: number;
   name: string;
@@ -12,11 +11,11 @@ export interface Hotel {
   about?: string;
   amenities: string[] | null;
   gallery?: string[];
-  pricePerNight?: number;
+  pricePerNight: number;         // مطلوب
   rooms?: Room[];
-  discountPercentage?: number;
-  nights?: number;
-  taxesAndFees?: number;
+  discountPercentage: number;    // مطلوب
+  nights: number;                // مطلوب
+  taxesAndFees: number;          // مطلوب
   phone?: string;
   distance?: string;
 }

@@ -1,9 +1,9 @@
 import type { Car } from "@/types/car";
-import BackButton from "../backButton";
 
 interface CarGalleryProps {
   car: Car;
 }
+
 const CarGallery = ({ car }: CarGalleryProps) => {
   return (
     <div className="bg-gray-50 rounded-xl p-6 flex items-center justify-center relative">
